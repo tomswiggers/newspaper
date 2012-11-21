@@ -1,11 +1,13 @@
 from django.db import models
+from newspaper.models import Client
+from newspaper.models import Item
 
 import datetime
 from datetime import date
 
 class Delivery(models.Model):
-  client_id = models.IntegerField()
-  item_id = models.IntegerField()
+  client = models.ForeignKey(Client)
+  item = models.ForeignKey(Item)
   days = models.IntegerField()
   begindate = models.DateField()
   enddate = models.DateField()

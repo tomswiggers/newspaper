@@ -11,9 +11,10 @@ class Item(models.Model):
 
   class Meta:
     app_label = "newspaper"
+    ordering = ['id']
 
   def __str__(self):
-    return str(self.id) + ';' + self.name + ', ' + str(self.days) + ', ' + str(self.freq)
+    return self.name + ', ' + str(self.description)
 
   def isDeliveryDay(self, date, days):
     check = self.getDayBitByDate(date)
