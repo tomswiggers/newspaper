@@ -4,6 +4,19 @@ import datetime
 from datetime import date
 
 class Client(models.Model):
+  FREQ = (
+      (1, 'Month'), 
+      (2, 'Bimonth'), 
+      (3, 'Quarter'), 
+      (4, 'Biyear'), 
+      (5, 'Year')
+  )
+
+  PREPAY = (
+      (0, 'Nee'),
+      (1, 'Ja')
+  )
+  
   name = models.CharField('Naam', max_length=255)
   firstname = models.CharField('Voornaam', max_length=255)
   street = models.CharField('Straat', max_length=255)
@@ -13,10 +26,10 @@ class Client(models.Model):
   city = models.CharField('Gemeente', max_length=255)
   round_nbr = models.IntegerField('Ronde')
   order = models.IntegerField('Volgorde in ronde')
-  delivery_begindate = models.DateField()
-  delivery_enddate = models.DateField()
-  prepay = models.IntegerField()
-  freq = models.IntegerField()
+  delivery_begindate = models.DateField('Levering Begindatum')
+  delivery_enddate = models.DateField('Levering Einddatum')
+  prepay = models.IntegerField('Vooraf betaler', choices=PREPAY)
+  freq = models.IntegerField('Frequentie', choices=FREQ)
   saldo = models.FloatField()
 
   class Meta:
