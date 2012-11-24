@@ -9,4 +9,5 @@ class BankHoliday(models.Model):
   class Meta:
     app_label = "newspaper"
 
-
+  def __str__(self):
+    return str(self.entrydate);
