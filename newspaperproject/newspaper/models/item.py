@@ -12,6 +12,8 @@ class Item(models.Model):
   class Meta:
     app_label = "newspaper"
     ordering = ['id']
+    verbose_name = 'Dienst'
+    verbose_name_plural = 'Diensten'
 
   def __str__(self):
     return self.name + ', ' + str(self.description)

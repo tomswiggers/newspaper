@@ -33,7 +33,9 @@ class Client(models.Model):
   saldo = models.FloatField()
 
   class Meta:
-    app_label = "newspaper"
+    app_label = 'newspaper'
+    verbose_name = 'Klant'
+    verbose_name_plural = 'Klanten'
 
   def isActive(self, client, entrydate):
 

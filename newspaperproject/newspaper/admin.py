@@ -11,9 +11,12 @@ class ClientAdmin(admin.ModelAdmin):
   list_filter = ('round_nbr',)
   search_fields = ('id', 'name', 'firstname')
 
+class DeliveryAdmin(admin.ModelAdmin):
+  search_fields = ('=client__id', 'client__name', 'client__firstname')
+
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Holiday)
 admin.site.register(BankHoliday)
-admin.site.register(Delivery)
+admin.site.register(Delivery, DeliveryAdmin)
 admin.site.register(Item)
 admin.site.register(Price)

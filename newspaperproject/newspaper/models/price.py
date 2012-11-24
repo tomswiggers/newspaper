@@ -11,8 +11,10 @@ class Price(models.Model):
   item = models.ForeignKey(Item)
 
   class Meta:
-    app_label = "newspaper"
+    app_label = 'newspaper'
     ordering = ['item']
+    verbose_name = 'Prijs'
+    verbose_name_plural = 'Prijzen'
 
   def __str__(self):
     return str(self.item.name) + ': ' + str(self.price) + ' (' + str(self.begindate) + ' - ' + str(self.enddate) + ')'

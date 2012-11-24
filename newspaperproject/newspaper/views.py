@@ -9,6 +9,6 @@ def index(request):
 def invoice(request):
   form = InvoiceForm()
 
-  t = loader.get_template('invoice.html')
+  t = loader.get_template('admin/change_form.html')
   c = Context({'form': form,})
   return HttpResponse(t.render(c))

@@ -12,6 +12,8 @@ class Holiday(models.Model):
   class Meta:
     app_label = "newspaper"
     ordering = ['-begindate']
+    verbose_name = 'Vakantie'
+    verbose_name_plural = 'Vakanties'
 
   def __str__(self):
     return str(self.client.id) + ': ' + self.client.firstname + ' ' + self.client.name + ' ' + str(self.begindate) + ' -> ' + str(self.enddate)
