@@ -6,6 +6,6 @@
 
 
 {% block content %}
-{{ listName }}
-{{ invoiceName }}
+<a href="{{ STATIC_URL}}{{ listName }}">{{ listName }}</a>
+<a href="{{ STATIC_URL}}{{ invoiceName }}">{{ invoiceName }}</a>
 {% endblock %}

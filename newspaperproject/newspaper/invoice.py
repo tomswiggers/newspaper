@@ -12,6 +12,8 @@ from newspaper.models import *
 
 from configmerchant import ConfigMerchant
 
+from django.conf import settings
+
 class Invoice:
 
   MONTH = 1
@@ -37,6 +39,12 @@ class Invoice:
 
   def getInvoiceFilename(self):
     return 'facturen-' + str(self.beginDate.strftime('%B')) + '.txt'
+
+  def getInvoiceFullFilename(self):
+    return settings.STATIC_ROOT + '/' + self.getInvoiceFilename()
+
+  def getListFullFilename(self):
+    return settings.STATIC_ROOT + '/' + self.getListFilename()
 
   def getLastDayOfMonth(self, date):
     nextMonth = (date.month % 12) + 1
@@ -329,7 +337,7 @@ class Invoice:
 
   def writeList(self, invoices):
     print '------------------writeList--------------------'
-    filename = self.getListFilename()
+    filename = self.getListFullFilename()
     fp = open(filename, 'w')
 
     fp.write('Postcode;Gemeente;Straat;Nummer;Naam;Voornaam;Totaal;Saldo;Te betalen\n')
@@ -345,7 +353,7 @@ class Invoice:
         print 'empty'
 
   def writeInvoices(self, invoices):
-    filename = self.getInvoiceFilename()
+    filename = self.getInvoiceFullFilename()
     fp = open(filename, 'w')
 
     for invoice in invoices:
