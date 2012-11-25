@@ -1,4 +1,21 @@
-<form action="/invoice" method="post">{% csrf_token %}
+{% extends "admin/base_site.html" %}
+{% load i18n adminmedia %}
+
+{{test}}
+
+
+<script type="text/javascript" src="/admin/jsi18n/"></script>
+<script type="text/javascript" src="/admin-media/js/core.js"></script>
+{{ form.media }}
+
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="/admin-media/css/forms.css" />
+
+
+{% block content %}
+<h2>Facturen</h2>
+<form action="/admin/newspaper/invoice/" method="post">{% csrf_token %}
   {{ form.as_p }}
   <input type="submit" value="Submit" />
 </form>
+{% endblock %}

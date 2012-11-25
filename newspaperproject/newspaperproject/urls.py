@@ -5,7 +5,6 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^newspaper/$', 'newspaper.views.index'),
-    url(r'^newspaper/invoice/$', 'newspaper.views.invoice'),
+    url(r'^admin/newspaper/invoice/', 'newspaper.views.invoice'),
     url(r'^admin/', include(admin.site.urls)),
 )
