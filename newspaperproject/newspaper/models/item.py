@@ -16,7 +16,7 @@ class Item(models.Model):
     verbose_name_plural = 'Diensten'
 
   def __str__(self):
-    return self.name + ', ' + str(self.description)
+    return str(self.id) + ':' + self.name
 
   def isDeliveryDay(self, date, days):
     check = self.getDayBitByDate(date)

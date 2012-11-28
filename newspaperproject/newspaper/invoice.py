@@ -41,10 +41,10 @@ class Invoice:
     return 'facturen-' + str(self.beginDate.strftime('%B')) + '.txt'
 
   def getInvoiceFullFilename(self):
-    return os.path.realpath(os.path.dirname(__file__)) + '/' + self.getInvoiceFilename()
+    return os.path.realpath(os.path.dirname(__file__)) + '/static/' + self.getInvoiceFilename()
 
   def getListFullFilename(self):
-    return os.path.realpath(os.path.dirname(__file__)) + '/' + self.getListFilename()
+    return os.path.realpath(os.path.dirname(__file__)) + '/static/' + self.getListFilename()
 
   def getLastDayOfMonth(self, date):
     nextMonth = (date.month % 12) + 1
