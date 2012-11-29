@@ -8,7 +8,7 @@ from newspaper.models import Price
 from django.contrib import admin
 
 class ClientAdmin(admin.ModelAdmin):
-  list_filter = ('round_nbr',)
+  list_filter = ('round_nbr', 'freq')
   search_fields = ('id', 'name', 'firstname')
 
 class DeliveryAdmin(admin.ModelAdmin):
