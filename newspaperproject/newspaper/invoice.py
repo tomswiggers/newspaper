@@ -132,12 +132,12 @@ class Invoice:
           flag = False
       else:
 
-        if client.freq == self.BIMONTH and beginDate.month % 2 == 0:
-          print "===== BIMONTH ====="
-
-          beginDate = self.getBeginDatePreviousMonth(beginDate)
-          print beginDate
-          print endDate
+        if client.freq == self.BIMONTH:
+          
+          if beginDate.month % 2 == 0:
+            beginDate = self.getBeginDatePreviousMonth(beginDate)
+          else:
+            flag = False
 
       if flag:
         invoices.append(self.getInvoice(client, beginDate, endDate))
