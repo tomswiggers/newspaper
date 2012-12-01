@@ -1,0 +1,35 @@
+{% extends "admin/base_site.html" %}
+{% load i18n adminmedia %}
+
+<script type="text/javascript" src="/admin/jsi18n/"></script>
+<script type="text/javascript" src="/admin-media/js/core.js"></script>
+{{ form.media }}
+
+{{ block.super }}
+
+
+{% block content %}
+<h2>Saldos</h2>
+<div class="results">
+  <table>
+    <thead id="result_list">
+      <tr>
+        <th>Naam</th>
+        <th>Saldo</th>
+        <th>Te betalen</th>
+        <th>Nieuw saldo</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for invoice in invoices %}
+      <tr class="{% cycle 'row1' 'row2' %}">
+        <td>{{ invoice.name }}</td>
+        <td>{{ invoice.saldo }}</td>
+        <td>{{ invoice.pay }}</td>
+        <td>{{ invoice.saldoNew }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

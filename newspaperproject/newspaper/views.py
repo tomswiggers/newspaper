@@ -41,3 +41,9 @@ def backup(request):
   shutil.copy(dbFullFilename, backupFullFilename)
 
   return render_to_response('backup.html', {'backupFilename': backupFilename}, context_instance=RequestContext(request))
+
+def calculateSaldos(request):
+  invoice = Invoice(2012, 11)
+  invoices = invoice.calculateSaldos()
+
+  return render_to_response('saldos.html', {'invoices': invoices}, context_instance=RequestContext(request))

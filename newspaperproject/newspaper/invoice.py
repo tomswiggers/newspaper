@@ -102,9 +102,8 @@ class Invoice:
   def calculateSaldos(self):
     clients = self.getClientsWithSaldo()
     invoices = self.getInvoiceList(clients)
-    print invoices
 
-    self.printSaldos(invoices)
+    return self.processSaldos(invoices)
 
   def getInvoiceList(self, clients):
     self.log('Start')
@@ -311,6 +310,29 @@ class Invoice:
     query = query.filter(item_id=itemId, begindate__lte=currentDate, enddate__gte=currentDate)
 
     return query.get()
+
+  def processSaldos(self, invoices):
+    saldos = list()
+
+    for invoice in invoices:
+
+      if len(invoice.values()) > 0:
+        total = self.getTotal(invoice.values()[0])
+        client = invoice.values()[0]['client']
+
+        pay = float(0)
+        saldoNew = float(0)
+
+        if client.saldo > total:
+          pay = 0
+          saldoNew = client.saldo - total
+        else:
+          pay = total - client.saldo
+          saldoNew = 0
+
+        saldos.append({'id': client.id, 'name': client.name, 'saldo': client.saldo, 'total': total, 'pay': pay, 'saldoNew': saldoNew})
+
+    return saldos
 
   def printSaldos(self, invoices):
     line = "{:<5}{:<30}{:>15}{:>25}{:>25}{:>15}"
