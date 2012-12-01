@@ -410,26 +410,31 @@ class Invoice:
   def getClientInvoice(self, invoice):
     client = invoice['client']
     deliveries = invoice['deliveries']
-  
+
+    if sys.platform.startswith('linux'):
+      delimiter = '\r\n'
+    else:
+      delimiter = '\r'
+
     if not client.box == "0":
       houseNumber = client.number + '/' + client.box
     else:
       houseNumber = client.number
 
-    invoiceStr = '\r\n'
-    invoiceStr = invoiceStr + '\r\n'
-    invoiceStr = invoiceStr + ConfigMerchant.line1 + '\r\n'
-    invoiceStr = invoiceStr + ConfigMerchant.line2 + '\r\n'
-    invoiceStr = invoiceStr + ConfigMerchant.line3 + '\r\n'
-    invoiceStr = invoiceStr + ConfigMerchant.line4 + datetime.date.today().isoformat() + '\r\n'
-    invoiceStr = invoiceStr + '__________________________________________________________________________\r\n'
-    invoiceStr = invoiceStr + 'REKENING van ' + invoice['beginDate'].isoformat() + ' tot ' + invoice['endDate'].isoformat() + '             ' + client.name + ' ' + client.firstname + '\r\n'
-    invoiceStr = invoiceStr + '                                                   ' + client.street + ' ' + houseNumber + '\r\n'
-    invoiceStr = invoiceStr + '                                                   ' + client.pc + ' ' + client.city + '\r\n'
+    invoiceStr = delimiter
+    invoiceStr = invoiceStr + delimiter
+    invoiceStr = invoiceStr + ConfigMerchant.line1 + delimiter
+    invoiceStr = invoiceStr + ConfigMerchant.line2 + delimiter
+    invoiceStr = invoiceStr + ConfigMerchant.line3 + delimiter
+    invoiceStr = invoiceStr + ConfigMerchant.line4 + datetime.date.today().isoformat() + delimiter
+    invoiceStr = invoiceStr + '__________________________________________________________________________' + delimiter
+    invoiceStr = invoiceStr + 'REKENING van ' + invoice['beginDate'].isoformat() + ' tot ' + invoice['endDate'].isoformat() + '             ' + client.name + ' ' + client.firstname + delimiter
+    invoiceStr = invoiceStr + '                                                   ' + client.street + ' ' + houseNumber + delimiter
+    invoiceStr = invoiceStr + '                                                   ' + client.pc + ' ' + client.city + delimiter
 
-    invoiceStr = invoiceStr + '\r\n'
-    invoiceStr = invoiceStr + 'omschrijving                aantal               prijs              totaal\r\n'
-    invoiceStr = invoiceStr + '__________________________________________________________________________\r\n'
+    invoiceStr = invoiceStr + delimiter
+    invoiceStr = invoiceStr + 'omschrijving                aantal               prijs              totaal' + delimiter
+    invoiceStr = invoiceStr + '__________________________________________________________________________' + delimiter
 
     total = float(0)
     counter = 0
@@ -438,15 +443,16 @@ class Invoice:
       counter = counter + 1
       totalItem = float(deliveries[priceId]['total']) * float(deliveries[priceId]['price'].price)
       total = total + totalItem
-      invoiceStr = invoiceStr + "%-28s%-21s%-20s%5s\r\n" % (deliveries[priceId]['item'].description, str(deliveries[priceId]['total']), str(float(deliveries[priceId]['price'].price)), str(totalItem))
+      invoiceStr = invoiceStr + "%-28s%-21s%-20s%5s" % (deliveries[priceId]['item'].description, str(deliveries[priceId]['total']), str(float(deliveries[priceId]['price'].price)), str(totalItem))
+      invoiceStr = invoiceStr + delimiter
 
     while counter < 6:
-      invoiceStr = invoiceStr + '\r\n'
+      invoiceStr = invoiceStr + delimiter
       counter = counter + 1
 
-    invoiceStr = invoiceStr + '__________________________________________________________________________\r\n'
-    invoiceStr = invoiceStr + 'TOTALEN:                                                         %.2f EUR\r\n' % (total)
-    invoiceStr = invoiceStr + '\r\n'
+    invoiceStr = invoiceStr + '__________________________________________________________________________' + delimiter
+    invoiceStr = invoiceStr + 'TOTALEN:                                                         %.2f EUR' % (total)
+    invoiceStr = invoiceStr + delimiter + delimiter
 
     #check prepay and saldo
     if client.saldo > 0:
@@ -456,26 +462,29 @@ class Invoice:
       else:
         remaining = float(0)
 
-      invoiceStr = invoiceStr + 'VOORSCHOT:                                                     %.2f EUR\r\n' % (total)
-      invoiceStr = invoiceStr + 'SALDO:                                                         %.2f EUR\r\n' % (client.saldo - total)
-      invoiceStr = invoiceStr + 'TE BETALEN:                                                    %.2f EUR\r\n' % (remaining)
+      invoiceStr = invoiceStr + 'VOORSCHOT:                                                     %.2f EUR' % (total)
+      invoiceStr = invoiceStr + delimiter
+      invoiceStr = invoiceStr + 'SALDO:                                                         %.2f EUR' % (client.saldo - total)
+      invoiceStr = invoiceStr + delimiter
+      invoiceStr = invoiceStr + 'TE BETALEN:                                                    %.2f EUR' % (remaining)
+      invoiceStr = invoiceStr + delimiter
 
-    invoiceStr = invoiceStr + '\r\n'
-    invoiceStr = invoiceStr + 'Maandagnamiddag en zaterdagnamiddag gesloten  !!!\r\n'
-    invoiceStr = invoiceStr + 'Gelieve de rekening in de winkel te betalen.\r\n'
-    invoiceStr = invoiceStr + '\r\n'
-    invoiceStr = invoiceStr + '\r\n'
-    invoiceStr = invoiceStr + '\r\n'
+    invoiceStr = invoiceStr + delimiter
+    invoiceStr = invoiceStr + 'Maandagnamiddag en zaterdagnamiddag gesloten  !!!' + delimiter
+    invoiceStr = invoiceStr + 'Gelieve de rekening in de winkel te betalen.' + delimiter
+    invoiceStr = invoiceStr + delimiter
+    invoiceStr = invoiceStr + delimiter
+    invoiceStr = invoiceStr + delimiter
 
     if client.saldo == 0:
-      invoiceStr = invoiceStr + '\r\n'
-      invoiceStr = invoiceStr + '\r\n'
-      invoiceStr = invoiceStr + '\r\n'
+      invoiceStr = invoiceStr + delimiter
+      invoiceStr = invoiceStr + delimiter
+      invoiceStr = invoiceStr + delimiter
 
-    invoiceStr = invoiceStr + '\r\n'
-    invoiceStr = invoiceStr + '\r\n'
-    invoiceStr = invoiceStr + '\r\n'
-    invoiceStr = invoiceStr + '\r\n'
+    invoiceStr = invoiceStr + delimiter
+    invoiceStr = invoiceStr + delimiter
+    invoiceStr = invoiceStr + delimiter
+    invoiceStr = invoiceStr + delimiter
 
     return invoiceStr
 
