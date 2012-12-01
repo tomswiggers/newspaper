@@ -359,20 +359,24 @@ class Invoice:
 
   def writeList(self, invoices):
     print '------------------writeList--------------------'
+    line = '{};{};{};{};{};{};{}\n'
     filename = self.getListFullFilename()
     fp = open(filename, 'w')
 
-    fp.write('Postcode;Gemeente;Straat;Nummer;Naam;Voornaam;Totaal;Saldo;Te betalen\n')
+    fp.write('Postcode;Gemeente;Straat;Nummer;Naam;Voornaam;Totaal\n')
+    
+    for client in self.sortInvoiceList(invoices):
+      fp.write(line.format(client['pc'], client['city'], client['street'], client['number'], client['name'], client['firstname'], client['total']))
 
-    #sorted(invoices, key=lambda invoice: invoice[0].street)
+  def sortInvoiceList(self, invoices):
+    invoiceList = list()
 
     for invoice in invoices:
 
       if len(invoice.values()) > 0:
-        print invoice.values()[0]['client']
-        fp.write(self.getClientSummary(invoice.values()[0]))
-      else:
-        print 'empty'
+        invoiceList.append(self.getClientSummary(invoice.values()[0]))
+
+    return sorted(invoiceList, key=lambda k: (k['pc'], k['street'].lower(), int(k['number'])))
 
   def writeInvoices(self, invoices):
     filename = self.getInvoiceFullFilename()
@@ -395,15 +399,13 @@ class Invoice:
     total = self.getTotal(invoice)
 
     client = invoice['client']
-    line = '{};{};{};{};{};{};{}\n'
     
     if total < client.saldo:
       total = 0
     elif total > client.saldo and client.saldo > 0:
       total = total - client.saldo
 
-
-    return line.format(client.pc, client.city, client.street, client.number, client.name, client.firstname, total)
+    return {'pc': client.pc, 'city': client.city, 'street': client.street, 'number': client.number, 'name': client.name, 'firstname': client.firstname, 'total': total}
 
   def getClientInvoice(self, invoice):
     client = invoice['client']
