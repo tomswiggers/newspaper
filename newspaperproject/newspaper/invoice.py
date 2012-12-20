@@ -68,7 +68,7 @@ class Invoice:
     else:
       year = entryDate.year
 
-    return date(year, month, 1)
+    return datetime.date(year, month, 1)
 
   def getBeginDateNextMonth(self, entryDate):
     month = (entryDate.month % 12) + 1
