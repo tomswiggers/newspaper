@@ -414,7 +414,7 @@ class Invoice:
     if sys.platform.startswith('linux'):
       delimiter = '\r\n'
     else:
-      delimiter = '\r'
+      delimiter = '\n'
 
     if not client.box == "0":
       houseNumber = client.number + '/' + client.box
