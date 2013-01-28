@@ -20,8 +20,9 @@ def invoice(request):
 
     if form.is_valid():
       month = request.POST['month']
+      year = request.POST['year']
 
-      invoice = Invoice(2012, int(month))
+      invoice = Invoice(int(year), int(month))
       invoice.calculateInvoice()
 
       return render_to_response('invoice-success.html', {'listName': invoice.getListFilename(), 'invoiceName': invoice.getInvoiceFilename()}, context_instance=RequestContext(request))
