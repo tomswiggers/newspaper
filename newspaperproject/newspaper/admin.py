@@ -2,8 +2,10 @@ from newspaper.models import Client
 from newspaper.models import Holiday
 from newspaper.models import BankHoliday
 from newspaper.models import Delivery
+from newspaper.models import DeliveryException
 from newspaper.models import Item
 from newspaper.models import Price
+from newspaper.models import InvoiceExtra
 
 from django.contrib import admin
 
@@ -18,5 +20,7 @@ admin.site.register(Client, ClientAdmin)
 admin.site.register(Holiday)
 admin.site.register(BankHoliday)
 admin.site.register(Delivery, DeliveryAdmin)
+admin.site.register(DeliveryException)
 admin.site.register(Item)
 admin.site.register(Price)
+admin.site.register(InvoiceExtra)
