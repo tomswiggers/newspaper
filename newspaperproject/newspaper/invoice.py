@@ -154,6 +154,7 @@ class Invoice:
     deliveries = self.getDeliveries(client.id)
     holidays = self.getHolidays(client.id)
     bankHolidays = self.getBankHolidays()
+    deliveryExceptions = self.getDeliveryExceptions(beginDate, endDate)
 
     while currentDate <= endDate:
 
@@ -173,35 +174,47 @@ class Invoice:
         invoicesPerDay = self.processDeliveries(client, deliveries, currentDate)
         
         for invoicePerDay in invoicesPerDay:
+    
+          #check if there is a delivery exception
+          if not self.isDeliveryException(deliveryExceptions, currentDate, invoicePerDay['item']):
 
-          #check client already in invoice list
-          if not invoices.has_key(client.id):
-            invoices[client.id] = {'client': client, 'deliveries': {}, 'beginDate': beginDate, 'endDate': endDate}
+            #check client already in invoice list
+            if not invoices.has_key(client.id):
+              invoices[client.id] = {'client': client, 'deliveries': {}, 'beginDate': beginDate, 'endDate': endDate}
 
-          #check if price is already in delivery list for client
-          if not invoices[client.id]['deliveries'].has_key(invoicePerDay['price'].id):
-            invoices[client.id]['deliveries'][invoicePerDay['price'].id] = {'total': 1, 'price': invoicePerDay['price'], 'item': invoicePerDay['item']}
-          else:
-            flagMonthly = False
-            flagBiWeekly = False
+            #check if price is already in delivery list for client
+            if not invoices[client.id]['deliveries'].has_key(invoicePerDay['price'].id):
+              invoices[client.id]['deliveries'][invoicePerDay['price'].id] = {'total': 1, 'price': invoicePerDay['price'], 'item': invoicePerDay['item']}
+            else:
+              flagMonthly = False
+              flagBiWeekly = False
 
-            #Add monthly items only once per month
-            if self.isMonthlyItemAlreadyInList(invoices[client.id]['deliveries'][invoicePerDay['price'].id]):
-              flagMonthly = True
+              #Add monthly items only once per month
+              if self.isMonthlyItemAlreadyInList(invoices[client.id]['deliveries'][invoicePerDay['price'].id]):
+                flagMonthly = True
 
-            #Add bi-weekly items only once per week
-            if self.isWeeklyItemAlreadyInList(invoices[client.id]['deliveries'][invoicePerDay['price'].id], currentDate):
-              flagBiWeekly = True
+              #Add bi-weekly items only once per week
+              if self.isWeeklyItemAlreadyInList(invoices[client.id]['deliveries'][invoicePerDay['price'].id], currentDate):
+                flagBiWeekly = True
 
-            if not flagMonthly and not flagBiWeekly:
-              invoices[client.id]['deliveries'][invoicePerDay['price'].id]['total'] = invoices[client.id]['deliveries'][invoicePerDay['price'].id]['total'] + 1
-              invoices[client.id]['deliveries'][invoicePerDay['price'].id]['item'].weekNumber = self.getWeekNumber(currentDate)
+              if not flagMonthly and not flagBiWeekly:
+                invoices[client.id]['deliveries'][invoicePerDay['price'].id]['total'] = invoices[client.id]['deliveries'][invoicePerDay['price'].id]['total'] + 1
+                invoices[client.id]['deliveries'][invoicePerDay['price'].id]['item'].weekNumber = self.getWeekNumber(currentDate)
 
       flag = True
       currentDate = currentDate + datetime.timedelta(days = 1)
 
     return invoices
- 
+
+  def isDeliveryException(self, deliveryExceptions, currentDate, item):
+
+    for deliveryException in deliveryExceptions:
+      
+      if deliveryException.item.id == item.id and deliveryException.entrydate == currentDate:
+        return True
+    
+    return False
+
   def isMonthlyItemAlreadyInList(self, delivery):
 
     if delivery['item'].freq == 4:
@@ -248,6 +261,9 @@ class Invoice:
 
   def getBankHolidays(self):
     return BankHoliday.objects.all()
+
+  def getDeliveryExceptions(self, beginDate, endDate):
+    return DeliveryException.objects.filter(entrydate__gte=beginDate, entrydate__lte=endDate).all()
 
   def isHoliday(self, holidays, currentDate):
 
