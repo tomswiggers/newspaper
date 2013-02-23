@@ -460,7 +460,11 @@ class Invoice:
       counter = counter + 1
       totalItem = float(deliveries[priceId]['total']) * float(deliveries[priceId]['price'].price)
       total = total + totalItem
-      invoiceStr = invoiceStr + "%-28s%-21s%-20s%5s" % (deliveries[priceId]['item'].description, str(deliveries[priceId]['total']), str(float(deliveries[priceId]['price'].price)), str(totalItem))
+
+      totalItem = "{0:.2f}".format(totalItem)
+      priceItem = "{0:.2f}".format(float(deliveries[priceId]['price'].price))
+
+      invoiceStr = invoiceStr + "%-28s%-21s%-20s%5s" % (deliveries[priceId]['item'].description, str(deliveries[priceId]['total']), priceItem, totalItem)
       invoiceStr = invoiceStr + delimiter
 
     while counter < 6:
