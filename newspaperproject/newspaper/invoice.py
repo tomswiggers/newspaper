@@ -174,7 +174,8 @@ class Invoice:
         invoicesPerDay = self.processDeliveries(client, deliveries, currentDate)
         
         for invoicePerDay in invoicesPerDay:
-    
+          deliveryId = invoicePerDay['deliveryId'] 
+
           #check if there is a delivery exception
           if not self.isDeliveryException(deliveryExceptions, currentDate, invoicePerDay['item']):
 
@@ -183,23 +184,23 @@ class Invoice:
               invoices[client.id] = {'client': client, 'deliveries': {}, 'beginDate': beginDate, 'endDate': endDate}
 
             #check if price is already in delivery list for client
-            if not invoices[client.id]['deliveries'].has_key(invoicePerDay['price'].id):
-              invoices[client.id]['deliveries'][invoicePerDay['price'].id] = {'total': 1, 'price': invoicePerDay['price'], 'item': invoicePerDay['item']}
+            if not invoices[client.id]['deliveries'].has_key(deliveryId):
+              invoices[client.id]['deliveries'][deliveryId] = {'total': 1, 'price': invoicePerDay['price'], 'item': invoicePerDay['item']}
             else:
               flagMonthly = False
               flagBiWeekly = False
 
               #Add monthly items only once per month
-              if self.isMonthlyItemAlreadyInList(invoices[client.id]['deliveries'][invoicePerDay['price'].id]):
+              if self.isMonthlyItemAlreadyInList(invoices[client.id]['deliveries'][deliveryId]):
                 flagMonthly = True
 
               #Add bi-weekly items only once per week
-              if self.isWeeklyItemAlreadyInList(invoices[client.id]['deliveries'][invoicePerDay['price'].id], currentDate):
+              if self.isWeeklyItemAlreadyInList(invoices[client.id]['deliveries'][deliveryId], currentDate):
                 flagBiWeekly = True
 
               if not flagMonthly and not flagBiWeekly:
-                invoices[client.id]['deliveries'][invoicePerDay['price'].id]['total'] = invoices[client.id]['deliveries'][invoicePerDay['price'].id]['total'] + 1
-                invoices[client.id]['deliveries'][invoicePerDay['price'].id]['item'].weekNumber = self.getWeekNumber(currentDate)
+                invoices[client.id]['deliveries'][deliveryId]['total'] = invoices[client.id]['deliveries'][deliveryId]['total'] + 1
+                invoices[client.id]['deliveries'][deliveryId]['item'].weekNumber = self.getWeekNumber(currentDate)
 
       flag = True
       currentDate = currentDate + datetime.timedelta(days = 1)
@@ -295,7 +296,7 @@ class Invoice:
           if Item().isDeliveryDay(currentDate, delivery.days):
             item = self.getItem(delivery.item_id)
             price = self.getPrice(delivery.item_id, currentDate)
-            invoices.append({'price': price, 'item': item, 'currentDate': currentDate})
+            invoices.append({'price': price, 'item': item, 'currentDate': currentDate, 'deliveryId': delivery.id})
         else:
           item = self.getItem(delivery.item_id)
 
@@ -303,16 +304,16 @@ class Invoice:
 
             if Item().isDeliveryDay(currentDate, item.days):
               price = self.getPrice(delivery.item_id, currentDate)
-              invoices.append({'price': price, 'item': item, 'currentDate': currentDate})
+              invoices.append({'price': price, 'item': item, 'currentDate': currentDate, 'deliveryId': delivery.id})
           elif item.freq == 3:
 
             if self.getWeekNumber(currentDate) % 2 == 0:
               price = self.getPrice(delivery.item_id, currentDate)
               item.weekNumber = self.getWeekNumber(currentDate)
-              invoices.append({'price': price, 'item': item, 'currentDate': currentDate})
+              invoices.append({'price': price, 'item': item, 'currentDate': currentDate, 'deliveryId': delivery.id})
           elif item.freq == 4:
             price = self.getPrice(delivery.item_id, currentDate)
-            invoices.append({'price': price, 'item': item, 'currentDate': currentDate})
+            invoices.append({'price': price, 'item': item, 'currentDate': currentDate, 'deliveryId': delivery.id})
           else:
             print '------------------------Other freq-----------------------------'
 
