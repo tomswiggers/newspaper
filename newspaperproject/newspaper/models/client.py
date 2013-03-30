@@ -3,6 +3,11 @@ from django.db import models
 import datetime
 from datetime import date
 
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+
+from django.db.models import F
+
 class Client(models.Model):
   FREQ = (
       (1, 'Month'), 
@@ -53,3 +58,24 @@ class Client(models.Model):
   def getString(self):
     return str(self.id) + ': ' + self.name + ' ' + self.firstname
 
+  def getActiveClients(self):
+    return Client.objects.order_by('round_nbr', 'order').all()
+
+  def isNewOrderNumber(self, clientId, orderNumber, roundNumber):
+    client = Client.objects.all().filter(order = orderNumber, round_nbr = roundNumber).exclude(id = clientId)
+
+    if client:
+      return True
+    else:
+      return False
+
+  def updateOrderNumber(self, orderNumber, roundNumber):
+    Client.objects.all().filter(order__gte = orderNumber, round_nbr = roundNumber).update(order = F('order') + 1)
+
+@receiver(pre_save, sender=Client)
+def updateRoundOrder(sender, **kwargs):
+  client = kwargs['instance']
+
+  if client.isNewOrderNumber(client.id, client.order, client.round_nbr):
+    print 'update order number'
+    client.updateOrderNumber(client.order, client.round_nbr)
