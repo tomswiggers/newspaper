@@ -77,5 +77,4 @@ def updateRoundOrder(sender, **kwargs):
   client = kwargs['instance']
 
   if client.isNewOrderNumber(client.id, client.order, client.round_nbr):
-    print 'update order number'
     client.updateOrderNumber(client.order, client.round_nbr)
