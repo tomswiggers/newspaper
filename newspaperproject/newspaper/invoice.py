@@ -93,8 +93,12 @@ class Invoice:
   def getClientsWithSaldo(self):
     return Client.objects.filter(saldo__gt=0).all()
 
-  def calculateInvoice(self):
-    invoices = self.getInvoiceList(self.getClients())
+  def calculateInvoice(self, clients=None):
+
+    if clients is None:
+      clients = self.getClients()
+
+    invoices = self.getInvoiceList(clients)
 
     self.writeList(invoices)
     self.writeInvoices(invoices)

@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.admin import widgets
 
-class InvoiceForm(forms.Form):
+from newspaper.models import *
+
+class DatePickerForm(forms.Form):
   months = (
     ('1', 'Januari'),
     ('2', 'Februari'),
@@ -25,3 +27,4 @@ class InvoiceForm(forms.Form):
 
   year = forms.ChoiceField(label='Factuur jaar', choices=years)
   month = forms.ChoiceField(label='Factuur maand', choices=months)
+  clients = forms.ModelChoiceField(required=False, queryset=Client.objects.order_by('round_nbr', 'order').all(), empty_label='All clients')
