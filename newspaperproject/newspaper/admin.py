@@ -16,11 +16,14 @@ class ClientAdmin(admin.ModelAdmin):
 class DeliveryAdmin(admin.ModelAdmin):
   search_fields = ('=client__id', 'client__name', 'client__firstname')
 
+class PriceAdmin(admin.ModelAdmin):
+  search_fields = ('item__id', 'item__name')
+
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Holiday)
 admin.site.register(BankHoliday)
 admin.site.register(Delivery, DeliveryAdmin)
 admin.site.register(DeliveryException)
 admin.site.register(Item)
-admin.site.register(Price)
+admin.site.register(Price, PriceAdmin)
 admin.site.register(InvoiceExtra)
