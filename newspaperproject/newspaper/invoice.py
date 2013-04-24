@@ -300,7 +300,7 @@ class Invoice:
           if Item().isDeliveryDay(currentDate, delivery.days):
             item = self.getItem(delivery.item_id)
             price = self.getPrice(delivery.item_id, currentDate)
-            invoices.append({'price': price, 'item': item, 'currentDate': currentDate, 'deliveryId': delivery.id})
+            invoices.append({'price': price, 'item': item, 'currentDate': currentDate, 'deliveryId': price.id})
         else:
           item = self.getItem(delivery.item_id)
 
@@ -308,16 +308,16 @@ class Invoice:
 
             if Item().isDeliveryDay(currentDate, item.days):
               price = self.getPrice(delivery.item_id, currentDate)
-              invoices.append({'price': price, 'item': item, 'currentDate': currentDate, 'deliveryId': delivery.id})
+              invoices.append({'price': price, 'item': item, 'currentDate': currentDate, 'deliveryId': price.id})
           elif item.freq == 3:
 
             if self.getWeekNumber(currentDate) % 2 == 0:
               price = self.getPrice(delivery.item_id, currentDate)
               item.weekNumber = self.getWeekNumber(currentDate)
-              invoices.append({'price': price, 'item': item, 'currentDate': currentDate, 'deliveryId': delivery.id})
+              invoices.append({'price': price, 'item': item, 'currentDate': currentDate, 'deliveryId': price.id})
           elif item.freq == 4:
             price = self.getPrice(delivery.item_id, currentDate)
-            invoices.append({'price': price, 'item': item, 'currentDate': currentDate, 'deliveryId': delivery.id})
+            invoices.append({'price': price, 'item': item, 'currentDate': currentDate, 'deliveryId': price.id})
           else:
             print '------------------------Other freq-----------------------------'
 
