@@ -27,4 +27,4 @@ class DatePickerForm(forms.Form):
 
   year = forms.ChoiceField(label='Factuur jaar', choices=years)
   month = forms.ChoiceField(label='Factuur maand', choices=months)
-  clients = forms.ModelChoiceField(required=False, queryset=Client.objects.order_by('round_nbr', 'order').all(), empty_label='All clients')
+  client = forms.IntegerField(label='Klant nummer')

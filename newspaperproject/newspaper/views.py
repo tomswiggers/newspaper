@@ -22,15 +22,15 @@ def invoice(request):
     if form.is_valid():
       month = request.POST['month']
       year = request.POST['year']
-      clients = request.POST['clients']
+      client = request.POST['client']
 
-      if clients:
-        clients = Client.objects.filter(pk=clients)
+      if client:
+        client = Client.objects.filter(pk=client)
       else:
-        clients = None
+        client = None
 
       invoice = Invoice(int(year), int(month))
-      invoice.calculateInvoice(clients)
+      invoice.calculateInvoice(client)
 
       return render_to_response('invoice-success.html', {'listName': invoice.getListFilename(), 'invoiceName': invoice.getInvoiceFilename()}, context_instance=RequestContext(request))
     else:
