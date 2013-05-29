@@ -27,4 +27,4 @@ class DatePickerForm(forms.Form):
 
   year = forms.ChoiceField(label='Factuur jaar', choices=years)
   month = forms.ChoiceField(label='Factuur maand', choices=months)
-  client = forms.IntegerField(label='Klant nummer')
+  client = forms.IntegerField(label='Klant nummer', required=False)
