@@ -306,7 +306,7 @@ class Invoice:
 
           if item.freq == 2:
 
-            if Item().isDeliveryDay(currentDate, item.days):
+            if (Item().isDeliveryDay(currentDate, item.days) or self.isFirstDeliveryDateAfterBankHoliday(currentDate)):
               price = self.getPrice(delivery.item_id, currentDate)
               invoices.append({'price': price, 'item': item, 'currentDate': currentDate, 'deliveryId': str(delivery.id)  + '_' + str(price.id)})
           elif item.freq == 3:
@@ -322,6 +322,12 @@ class Invoice:
             print '------------------------Other freq-----------------------------'
 
     return invoices
+
+  def isFirstDeliveryDateAfterBankHoliday(self, currentDate):
+    if (currentDate == '2013-05-02' or currentDate == '2013-05-10'):
+      return True
+    else:
+      return False
 
   def getItem(self, itemId):
     return Item.objects.filter(id = itemId).get()
