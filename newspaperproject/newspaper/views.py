@@ -74,12 +74,13 @@ def clientList(request):
   clientList = client.getActiveClients()
 
   line = '{};{};{};{};{};{};{};{}\n'
-  filename = self.getListFullFilename()
-  fp = open(filename, 'w')
+  filename = '/klantenlijst-' + str(datetime.datetime.now().strftime('%B')) + '.csv'
+  fullFilename = os.path.realpath(os.path.dirname(__file__)) + '/static' + filename
+  fp = open(fullFilename, 'w')
 
   fp.write('Postcode;Gemeente;Straat;Nummer;Bus;Naam;Voornaam;Totaal\n')
 
-  for client in self.sortInvoiceList(invoices):
-    fp.write(line.format(client['pc'], client['city'], client['street'], client['number'], client['box'], client['name'], client['firstname'], client['total']))
+  for client in clientList:
+    fp.write(line.format(client.firstname, client.name, client.firstname, client.name, client.firstname, client.name, client.firstname, client.name))
 
   return render_to_response('success.html', {'fileName': filename}, context_instance=RequestContext(request))
