@@ -58,8 +58,14 @@ class Client(models.Model):
   def getString(self):
     return str(self.id) + ': ' + self.name + ' ' + self.firstname
 
-  def getActiveClients(self):
-    return Client.objects.order_by('round_nbr', 'order').all()
+  def getActiveClients(self, entrydate = datetime.datetime.now()):
+    return Client.objects.filter(
+          delivery_begindate__lte = entrydate
+        ).filter(
+          delivery_enddate__gte = entrydate    
+        ).order_by(
+          'round_nbr', 'order'
+        ).all()
 
   def isNewOrderNumber(self, clientId, orderNumber, roundNumber):
     client = Client.objects.all().filter(order = orderNumber, round_nbr = roundNumber).exclude(id = clientId)
