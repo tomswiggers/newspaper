@@ -157,7 +157,7 @@ class Invoice:
 
     deliveries = self.getDeliveries(client.id)
     holidays = self.getHolidays(client.id)
-    bankHolidays = self.getBankHolidays()
+    #bankHolidays = self.getBankHolidays()
     deliveryExceptions = self.getDeliveryExceptions(beginDate, endDate)
 
     while currentDate <= endDate:
@@ -167,8 +167,8 @@ class Invoice:
         flag = False
 
       #check if it's a bank holiday
-      if self.isBankHoliday(bankHolidays, currentDate):
-        flag = False
+      #if self.isBankHoliday(bankHolidays, currentDate):
+        #flag = False
 
       #check if client is active
       if not client.isActive(client, currentDate):
@@ -290,6 +290,7 @@ class Invoice:
 
   def processDeliveries(self, client, deliveries, currentDate):
     invoices = list()
+    bankHolidays = self.getBankHolidays()
 
     for delivery in deliveries:
 
@@ -297,16 +298,17 @@ class Invoice:
         
         if (delivery.days > 0):
 
-          if Item().isDeliveryDay(currentDate, delivery.days):
-            item = self.getItem(delivery.item_id)
-            price = self.getPrice(delivery.item_id, currentDate)
-            invoices.append({'price': price, 'item': item, 'currentDate': currentDate, 'deliveryId': str(delivery.id)  + '_' + str(price.id)})
+          if not self.isBankHoliday(bankHolidays, currentDate):
+            if Item().isDeliveryDay(currentDate, delivery.days):
+              item = self.getItem(delivery.item_id)
+              price = self.getPrice(delivery.item_id, currentDate)
+              invoices.append({'price': price, 'item': item, 'currentDate': currentDate, 'deliveryId': str(delivery.id)  + '_' + str(price.id)})
         else:
           item = self.getItem(delivery.item_id)
 
           if item.freq == 2:
 
-            if (Item().isDeliveryDay(currentDate, item.days) or self.isFirstDeliveryDateAfterBankHoliday(currentDate)):
+            if (Item().isDeliveryDay(currentDate, item.days) or (item.days == 8 and self.isFirstDeliveryDateAfterBankHoliday(currentDate, 8)) or (item.days == 16 and self.isFirstDeliveryDateAfterBankHoliday(currentDate, 16))):
               price = self.getPrice(delivery.item_id, currentDate)
               invoices.append({'price': price, 'item': item, 'currentDate': currentDate, 'deliveryId': str(delivery.id)  + '_' + str(price.id)})
           elif item.freq == 3:
@@ -323,8 +325,11 @@ class Invoice:
 
     return invoices
 
-  def isFirstDeliveryDateAfterBankHoliday(self, currentDate):
-    if (currentDate == '2013-05-02' or currentDate == '2013-05-10'):
+  def isFirstDeliveryDateAfterBankHoliday(self, currentDate, day):
+    d1 = datetime.datetime(2013, 5, 2)
+    d2 = datetime.datetime(2013, 5, 10)
+    if ((day == 8 and currentDate == d1.date()) or (currentDate == d2.date() and day == 16)):
+      print 'ok'
       return True
     else:
       return False
@@ -401,7 +406,13 @@ class Invoice:
     for invoice in invoices:
 
       if len(invoice.values()) > 0:
-        invoiceList.append(self.getClientSummary(invoice.values()[0]))
+        clientSummary = self.getClientSummary(invoice.values()[0])
+        invoiceList.append(clientSummary)
+        print clientSummary['name']
+        print clientSummary['number']
+        print type(clientSummary['number'])
+        if type(clientSummary['number']) != unicode:
+          return ''
 
     return sorted(invoiceList, key=lambda k: (k['pc'], k['street'].lower(), int(k['number'])))
 
@@ -504,8 +515,8 @@ class Invoice:
     invoiceStr = invoiceStr + 'Maandagnamiddag en zaterdagnamiddag gesloten  !!!' + delimiter
     invoiceStr = invoiceStr + 'Gelieve de rekening in de winkel te betalen.' + delimiter
     invoiceStr = invoiceStr + delimiter
-    invoiceStr = invoiceStr + delimiter
-    invoiceStr = invoiceStr + delimiter
+    invoiceStr = invoiceStr + '' + delimiter
+    invoiceStr = invoiceStr + '' + delimiter
 
     if client.saldo == 0:
       invoiceStr = invoiceStr + delimiter
