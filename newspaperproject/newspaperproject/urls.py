@@ -8,5 +8,6 @@ urlpatterns = patterns('',
     url(r'^admin/newspaper/invoice/', 'newspaper.views.invoice'),
     url(r'^admin/newspaper/saldos/', 'newspaper.views.calculateSaldos'),
     url(r'^admin/newspaper/backup/', 'newspaper.views.backup'),
+    url(r'^admin/client/list/', 'newspaper.views.clientList'),
     url(r'^admin/', include(admin.site.urls)),
 )
