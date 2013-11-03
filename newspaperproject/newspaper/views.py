@@ -75,8 +75,8 @@ def clientList(request):
   clientList = client.getActiveClients()
 
   line = '{};{};{};{};{};{};{};{}\n'
-  filename = '/klantenlijst-' + str(datetime.datetime.now().strftime('%B')) + '.csv'
-  fullFilename = os.path.realpath(os.path.dirname(__file__)) + '/static' + filename
+  filename = 'klantenlijst-' + str(datetime.datetime.now().strftime('%B')) + '.csv'
+  fullFilename = os.path.realpath(os.path.dirname(__file__)) + '/static/' + filename
   fp = open(fullFilename, 'w')
 
 
