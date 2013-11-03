@@ -84,7 +84,7 @@ def clientList(request):
 
     if roundNumber != client.round_nbr:
       fp.write('Klanten van ronde ' + str(client.round_nbr) + '\n');
-      fp.write('Nummer;Klant nummer;Naam;Straat;Nummer;Bus;Postcode;Gemeente\n')
+      fp.write('Nr;Klant;Naam;Straat;Nr;Bus;Pc;Gemeente\n')
 
     fp.write(
       line.format(
