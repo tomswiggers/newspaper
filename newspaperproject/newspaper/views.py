@@ -70,6 +70,7 @@ def calculateSaldos(request):
     return render_to_response('date-picker.html', {'form': form, 'formAction': '/admin/newspaper/saldos/', 'title': 'Saldos'}, context_instance=RequestContext(request))
 
 def clientList(request):
+  roundNumber = 0
   client = Client()
   clientList = client.getActiveClients()
 
@@ -78,9 +79,26 @@ def clientList(request):
   fullFilename = os.path.realpath(os.path.dirname(__file__)) + '/static' + filename
   fp = open(fullFilename, 'w')
 
-  fp.write('Postcode;Gemeente;Straat;Nummer;Bus;Naam;Voornaam;Totaal\n')
 
   for client in clientList:
-    fp.write(line.format(client.firstname, client.name, client.firstname, client.name, client.firstname, client.name, client.firstname, client.name))
+
+    if roundNumber != client.round_nbr:
+      fp.write('Klanten van ronde ' + str(client.round_nbr) + '\n');
+      fp.write('Nummer;Klant nummer;Naam;Straat;Nummer;Bus;Postcode;Gemeente\n')
+
+    fp.write(
+      line.format(
+        client.order,
+        client.id,
+        client.firstname + ' ' + client.name, 
+        client.street, 
+        client.number, 
+        client.box_number, 
+        client.pc, 
+        client.city, 
+      )
+    )
+
+    roundNumber = client.round_nbr
 
   return render_to_response('success.html', {'fileName': filename}, context_instance=RequestContext(request))

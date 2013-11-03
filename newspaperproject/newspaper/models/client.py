@@ -78,6 +78,15 @@ class Client(models.Model):
   def updateOrderNumber(self, orderNumber, roundNumber):
     Client.objects.all().filter(order__gte = orderNumber, round_nbr = roundNumber).update(order = F('order') + 1)
 
+  def _getBoxNumber(self):
+    
+    if self.box == '0':
+      return ''
+    
+    return self.box
+
+  box_number = property(_getBoxNumber)
+
 @receiver(pre_save, sender=Client)
 def updateRoundOrder(sender, **kwargs):
   client = kwargs['instance']
