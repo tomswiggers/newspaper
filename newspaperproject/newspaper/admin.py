@@ -5,7 +5,7 @@ from newspaper.models import Delivery
 from newspaper.models import DeliveryException
 from newspaper.models import Item
 from newspaper.models import Price
-from newspaper.models import InvoiceExtra
+from newspaper.models import ConfigSettings
 
 from django.contrib import admin
 
@@ -26,4 +26,4 @@ admin.site.register(Delivery, DeliveryAdmin)
 admin.site.register(DeliveryException)
 admin.site.register(Item)
 admin.site.register(Price, PriceAdmin)
-admin.site.register(InvoiceExtra)
+admin.site.register(ConfigSettings)
