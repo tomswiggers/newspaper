@@ -512,10 +512,7 @@ class Invoice:
       invoiceStr = invoiceStr + delimiter
 
     invoiceStr = invoiceStr + delimiter
-    invoiceStr = invoiceStr + 'Maandagnamiddag en zaterdagnamiddag gesloten  !!!' + delimiter
-    invoiceStr = invoiceStr + 'Gelieve de rekening in de winkel te betalen.' + delimiter
-    invoiceStr = invoiceStr + delimiter
-    invoiceStr = invoiceStr + '' + delimiter
+    invoiceStr = invoiceStr + self.getFooterText(delimiter)
     invoiceStr = invoiceStr + '' + delimiter
 
     if client.saldo == 0:
@@ -543,3 +540,16 @@ class Invoice:
       currentDate = currentDate + delta
 
     return counter
+  
+  def getFooterText(self, delimiter):
+    text = ''
+
+    for i in [1,2,3,4]:
+      varname = 'line' + str(i)
+
+      try:
+        text = ConfigSettings.objects.get(name=varname).value + delimiter
+      except ConfigSettings.DoesNotExist:
+        text = text + delimiter
+
+    return text
