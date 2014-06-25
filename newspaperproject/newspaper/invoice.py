@@ -548,7 +548,7 @@ class Invoice:
       varname = 'line' + str(i)
 
       try:
-        text = ConfigSettings.objects.get(name=varname).value + delimiter
+        text = text + ConfigSettings.objects.get(name=varname).value + delimiter
       except ConfigSettings.DoesNotExist:
         text = text + delimiter
 
