@@ -6,4 +6,5 @@ from price import Price
 from holiday import Holiday
 from bankholiday import BankHoliday
 from invoiceextra import InvoiceExtra
+from invoiceextra import InvoiceExtraItem
 from configsettings import ConfigSettings

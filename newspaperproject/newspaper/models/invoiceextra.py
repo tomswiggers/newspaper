@@ -4,13 +4,12 @@ import datetime
 from datetime import date
 
 from client import Client
+from invoiceextraitem import InvoiceExtraItem
 
 class InvoiceExtra(models.Model):
  
   client = models.ForeignKey(Client) 
-  description = models.CharField('Beschrijving', max_length=255)
-  number = models.IntegerField('Aantal')
-  amount = models.FloatField()
+  invoiceExtraItem = models.ManyToManyField(InvoiceExtraItem) 
 
   class Meta:
     app_label = 'newspaper'
