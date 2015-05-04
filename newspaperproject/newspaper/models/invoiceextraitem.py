@@ -4,10 +4,16 @@ import datetime
 from datetime import date
 
 class InvoiceExtraItem(models.Model):
- 
+  BTW_VALUES = (
+    (0, u'0.0%'),
+    (6, u'6.0%'),
+    (21, u'21.0%'),
+  )
+
   description = models.CharField('Beschrijving', max_length=255)
   number = models.IntegerField('Aantal')
   amount = models.FloatField()
+  btw = models.IntegerField(choices=BTW_VALUES)
 
   class Meta:
     app_label = 'newspaper'
