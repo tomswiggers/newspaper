@@ -23,6 +23,8 @@ class DatePickerForm(forms.Form):
     ('2013', '13'),
     ('2014', '14'),
     ('2015', '15'),
+    ('2016', '16'),
+    ('2017', '17'),
   )
 
   year = forms.ChoiceField(label='Factuur jaar', choices=years)
