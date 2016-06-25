@@ -494,7 +494,7 @@ class Invoice:
 
     invoiceStr = invoiceStr + '__________________________________________________________________________' + delimiter
     invoiceStr = invoiceStr + 'TOTALEN:                                                         %.2f EUR' % (total)
-    invoiceStr = invoiceStr + delimiter + delimiter
+    invoiceStr = invoiceStr + delimiter # line 21
 
     #check prepay and saldo
     if client.saldo > 0:
@@ -505,25 +505,19 @@ class Invoice:
         remaining = float(0)
 
       invoiceStr = invoiceStr + 'VOORSCHOT:                                                     %.2f EUR' % (total)
-      invoiceStr = invoiceStr + delimiter
+      invoiceStr = invoiceStr + delimiter # line 22
       invoiceStr = invoiceStr + 'SALDO:                                                         %.2f EUR' % (client.saldo - total)
-      invoiceStr = invoiceStr + delimiter
+      invoiceStr = invoiceStr + delimiter # line 23
       invoiceStr = invoiceStr + 'TE BETALEN:                                                    %.2f EUR' % (remaining)
-      invoiceStr = invoiceStr + delimiter
+      invoiceStr = invoiceStr + delimiter # line 24
+    else:
+      invoiceStr = invoiceStr + delimiter # line 22
+      invoiceStr = invoiceStr + delimiter # line 23
+      invoiceStr = invoiceStr + delimiter # line 24
 
-    invoiceStr = invoiceStr + delimiter
-    invoiceStr = invoiceStr + self.getFooterText(delimiter)
-    invoiceStr = invoiceStr + '' + delimiter
-
-    if client.saldo == 0:
-      invoiceStr = invoiceStr + delimiter
-      invoiceStr = invoiceStr + delimiter
-      invoiceStr = invoiceStr + delimiter
-
-    invoiceStr = invoiceStr + delimiter
-    invoiceStr = invoiceStr + delimiter
-    invoiceStr = invoiceStr + delimiter
-    invoiceStr = invoiceStr + delimiter
+    invoiceStr = invoiceStr + delimiter # line 25
+    invoiceStr = invoiceStr + self.getFooterText(delimiter) # line 26 + 27 + 28 + 29
+    invoiceStr = invoiceStr + '' + delimiter # line 30
 
     return invoiceStr
 
